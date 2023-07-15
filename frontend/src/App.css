@@ -1,0 +1,31 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(100, 1%);
+  grid-gap: 0px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.grid-button {
+  width: 100%;
+  padding-top: 50%;
+  padding-bottom: 50%;
+  padding-left: 50%;
+  padding-right: 50%;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-size: 0px;
+  background-color: #767575;
+  border: solid;
+  border-width: 1px;
+  outline: none;
+  cursor: pointer;
+}
+
+.grid-button:hover {
+  background-color: #ce1313;
+}
+
+.grid-button:active {
+  background-color: #246255;
+}
