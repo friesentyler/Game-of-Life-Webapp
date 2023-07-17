@@ -1,5 +1,11 @@
 import './App.css';
-import {useState} from 'react';
+import { useState } from 'react';
+
+const BottomBarMenu = () => {
+  return <div className='menu-container'>
+    <button id="menuButton" className="menu-button" draggable="true"></button>
+  </div>
+}
 
 const Grid = () => {
   const numRows = 100;
@@ -37,7 +43,7 @@ const Grid = () => {
       button.style.backgroundColor = "#767575";
     }
   }
-  
+
   for (let i = 0; i < grid.length; i++) {
     for (let j = 0; j < grid[i].length; j++) {
       let button = document.getElementById('button-' + i + '-' + j);
@@ -46,7 +52,7 @@ const Grid = () => {
       } else if (grid[i][j] === false) {
         if (button) {
           button.style.backgroundColor = "#767575";
-          
+
         }
       }
     }
@@ -59,14 +65,16 @@ const Grid = () => {
         const buttonId = 'button-' + row + '-' + col;
         buttons.push(
           <button key={buttonId} id={buttonId} clickedstate="false" className='grid-button' onClick={() => clickHandler(row, col, buttonId)} onMouseEnter={() => mouseHovering(row, col, buttonId)} onMouseLeave={() => mouseLeaving(row, col, buttonId)}>
-            
+
           </button>
         )
       }
     }
     return buttons;
   }
-  return <div className="grid">{renderButtons()}</div>
+  return <div>
+    <div className="grid">{renderButtons()}<BottomBarMenu/></div>
+  </div>
 }
 
 export default Grid;
