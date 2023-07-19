@@ -3,16 +3,10 @@ import { useState } from 'react';
 
 const BottomBarMenu = () => {
   return <div className='menu-container'>
-    <button id="menuButton" className="menu-button"></button>
-    <button id="menuButton" className="menu-button"></button>
-    <button id="menuButton" className="menu-button"></button>
-    <button id="menuButton" className="menu-button"></button>
-    <button id="menuButton" className="menu-button"></button>
-    <button id="menuButton" className="menu-button"></button>
-    <button id="menuButton" className="menu-button"></button>
-    <button id="menuButton" className="menu-button"></button>
-    <button id="menuButton" className="menu-button"></button>
-    <button id="menuButton" className="menu-button"></button>
+    <button id="menuButton" className="menu-button">BACK 1x</button>
+    <button id="menuButton" className="menu-button">START</button>
+    <button id="menuButton" className="menu-button">PAUSE</button>
+    <button id="menuButton" className="menu-button">FORWARD 1x</button>
   </div>
 }
 
