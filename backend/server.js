@@ -1,7 +1,12 @@
 const express = require('express');
   
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
+
+app.get('/boardstate', (req, res) => {
+    res.send('Hello World!')
+  })
+
   
 app.listen(PORT, (error) =>{
     if(!error)
