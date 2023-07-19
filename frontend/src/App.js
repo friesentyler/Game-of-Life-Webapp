@@ -3,7 +3,16 @@ import { useState } from 'react';
 
 const BottomBarMenu = () => {
   return <div className='menu-container'>
-    <button id="menuButton" className="menu-button" draggable="true"></button>
+    <button id="menuButton" className="menu-button"></button>
+    <button id="menuButton" className="menu-button"></button>
+    <button id="menuButton" className="menu-button"></button>
+    <button id="menuButton" className="menu-button"></button>
+    <button id="menuButton" className="menu-button"></button>
+    <button id="menuButton" className="menu-button"></button>
+    <button id="menuButton" className="menu-button"></button>
+    <button id="menuButton" className="menu-button"></button>
+    <button id="menuButton" className="menu-button"></button>
+    <button id="menuButton" className="menu-button"></button>
   </div>
 }
 
@@ -33,14 +42,14 @@ const Grid = () => {
   const mouseHovering = (row, col, buttonId) => {
     let button = document.getElementById(buttonId);
     if (grid[row][col] !== true) {
-      button.style.backgroundColor = "#ce1313";
+      button.style.backgroundColor = "#ff5852";
     }
   }
 
   const mouseLeaving = (row, col, buttonId) => {
     let button = document.getElementById(buttonId);
     if (grid[row][col] !== true) {
-      button.style.backgroundColor = "#767575";
+      button.style.backgroundColor = "#232a26";
     }
   }
 
@@ -48,10 +57,10 @@ const Grid = () => {
     for (let j = 0; j < grid[i].length; j++) {
       let button = document.getElementById('button-' + i + '-' + j);
       if (grid[i][j] === true) {
-        button.style.backgroundColor = "#FFFF00";
+        button.style.backgroundColor = "#ffd45a";
       } else if (grid[i][j] === false) {
         if (button) {
-          button.style.backgroundColor = "#767575";
+          button.style.backgroundColor = "#232a26";
 
         }
       }
@@ -73,7 +82,8 @@ const Grid = () => {
     return buttons;
   }
   return <div>
-    <div className="grid">{renderButtons()}<BottomBarMenu/></div>
+    <div className="grid">{renderButtons()}</div>
+    <BottomBarMenu/>
   </div>
 }
 
