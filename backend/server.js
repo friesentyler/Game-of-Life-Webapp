@@ -23,25 +23,36 @@ db.once("open", () => {
     console.log("Connected successfully");
 });
 
-app.post('/initialize', (req, res) => {
+app.post('/initialize', async (req, res) => {
+    let states = [];
     for (let i = 0; i < 100; i++) {
         for (let j = 0; j < 100; j++) {
-            db.GameState.insertOne(
-                {
-                    row: i,
-                    column: j,
-                    alive: false
-                }
-            )
+            const model = new Model({
+                row: i,
+                column: j,
+                alive: false,
+            });
+            model.save();
+            states = states.concat(model);
         }
     }
-    res.json(null);
+    res.json(states);
+})
+
+app.put('/modify/:row/:column', async (req, res) => {
+    const updated = await Model.updateOne({row: req.params.row, column: req.params.column}, {alive: req.body.alive}, {new: true});
+    res.json(updated);
 })
 
 app.get('/boardstate', async (req, res) => {
     const boardstate = await Model.find();
     res.json(boardstate);
   })
+
+app.get('/boardstate/:row/:column', async (req, res) => {
+    const singleBoardState = await Model.find({row: req.params.row, column: req.params.column});
+    res.json(singleBoardState);
+})
   
 app.listen(PORT, (error) =>{
     if(!error)
