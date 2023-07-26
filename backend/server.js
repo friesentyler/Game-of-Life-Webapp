@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require("mongoose");
 const cors = require("cors");
+const lodash = require('lodash');
   
 const app = express();
 const PORT = 3001;
@@ -22,6 +23,8 @@ db.on("error", console.error.bind(console, "Error connecting..."));
 db.once("open", () => {
     console.log("Connected successfully");
 });
+// uncomment if performance problems
+//mongoose.set('autoIndex', false);
 
 const liveNeighbors = (index, board) => {
     let count = 0;
@@ -79,20 +82,27 @@ const liveNeighbors = (index, board) => {
 }
 
 const updateBoardState = (board) => {
+    const newBoard = lodash.cloneDeep(board);
+    let differences = [];
     let liveness = [];
     for (let i = 0; i < board.length; i++) {
         liveness.push(liveNeighbors(i, board));
     }
     for (let j = 0; j < liveness.length; j++) {
         if (liveness[j] >= 2 && liveness[j] <= 3 && board[j].alive == true) {
-            board[j].alive = true;
+            newBoard[j].alive = true;
         } else if (liveness[j] == 3) {
-            board[j].alive = true;
+            newBoard[j].alive = true;
         } else {
-            board[j].alive = false;
+            newBoard[j].alive = false;
         }
     }
-    return board;
+    for (let i = 0; i < board.length; i++) {
+        if (board[i].alive !== newBoard[i].alive) {
+            differences.push(newBoard[i])
+        }
+    }
+    return differences
 }
 
 app.post('/initialize', async (req, res) => {
@@ -107,7 +117,7 @@ app.post('/initialize', async (req, res) => {
                 alive: false,
             });
             model.save();
-            states = states.concat(model);
+            states.push(model);
             count++;
         }
     }
@@ -130,10 +140,20 @@ app.get('/boardstate/:row/:column', async (req, res) => {
 })
 
 app.get('/update', async (req, res) => {
-    // START WORK HERE, WE NEED TO UPDATE MONGODB WITH numb (try only updating records that changed?)
     const boardstate = await Model.find().sort('index');
     let numb = updateBoardState(boardstate);
-    res.json(numb);
+    let massUpdate = [];
+    for (let i = 0; i < numb.length; i++) {
+        const updateOperation = {
+            updateOne: {
+              filter: { row: numb[i].row, column: numb[i].column},
+              update: { alive: numb[i].alive }
+            }
+        };
+        massUpdate.push(updateOperation);
+    }
+    await Model.bulkWrite(massUpdate);
+    res.json();
 })
   
 app.listen(PORT, (error) =>{

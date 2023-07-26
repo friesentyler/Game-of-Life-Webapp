@@ -4,15 +4,18 @@ const Schema = mongoose.Schema;
 const ModelSchema = new Schema({
     index: {
         type: Number,
-        required: true
+        required: true,
+        index: true
     },
     row: {
         type: Number,
-        required: true
+        required: true,
+        index: true
     },
     column: {
         type: Number,
-        required: true
+        required: true,
+        index: true
     },
     alive: {
         type: Boolean,
