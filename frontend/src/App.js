@@ -1,21 +1,45 @@
 import './App.css';
-import { useState } from 'react';
-
-const BottomBarMenu = () => {
-  return <div className='menu-container'>
-    <button id="menuButton" className="menu-button">BACK 1x</button>
-    <button id="menuButton" className="menu-button">START</button>
-    <button id="menuButton" className="menu-button">PAUSE</button>
-    <button id="menuButton" className="menu-button">FORWARD 1x</button>
-  </div>
-}
+import { useState, useEffect } from 'react';
 
 const Grid = () => {
   const numRows = 100;
   const numColumns = 100;
   const [grid, setgrid] = useState(Array.from({ length: 100 }, () => new Array(100).fill(false)));
 
-  const clickHandler = (row, col, buttonId) => {
+  useEffect(() => {
+    getGrid();
+  }, []);
+
+  const BottomBarMenu = () => {
+    const buttonHandler = async () => {
+      await fetch('http://localhost:3001/update');
+      console.log("fetched")
+      getGrid();
+    }
+
+    return <div className='menu-container'>
+      <button id="menuButton" className="menu-button">BACK 1x</button>
+      <button id="menuButton" className="menu-button">START</button>
+      <button id="menuButton" className="menu-button">PAUSE</button>
+      <button id="menuButton" className="menu-button" onClick={() => buttonHandler()}>FORWARD 1x</button>
+    </div>
+  }
+
+  const getGrid = async () => {
+    let newGrid = Array.from({ length: 100 }, () => new Array(100).fill(false));
+    fetch('http://localhost:3001/boardstate')
+      .then(res => res.json())
+      .then(data => {data.forEach(obj => {
+        const { row, column, alive } = obj;
+        if (row < newGrid.length && column < newGrid[row].length) {
+          newGrid[row][column] = alive;
+        }
+      });})
+      .then(data => setgrid(newGrid))
+      .catch((err) => console.error("Error: ", err));
+  }
+
+  const clickHandler = async (row, col, buttonId) => {
     console.log("You clicked me!", row, col);
     let button = document.getElementById(buttonId);
     console.log(button.id)
@@ -31,6 +55,14 @@ const Grid = () => {
       })
     })
     setgrid(newState)
+
+    let output = await fetch('http://localhost:3001/modify/' + row + '/' + col, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            method: "PUT",
+            body: JSON.stringify({"alive": !grid[row][col]})
+          }).then(res => res.json());
   }
 
   const mouseHovering = (row, col, buttonId) => {
